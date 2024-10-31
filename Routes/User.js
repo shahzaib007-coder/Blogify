@@ -12,17 +12,39 @@ const {name,email,password} = req.body;
 if(!email || !name ||!password){
     return res.status(204).send({error:"Input all fields"})
 }
-
-const user = await User.create({
-    name,
-    email,
-    password,
-})  
+try {
+    const user = await User.create({
+        name,
+        email,
+        password,
+    })
+    if(user)res.status(200).send('Success');
+} catch (error) {
+    res.send(error, "error occurred")
+}
+ 
 
 })
 
-router.post('/signin',(req,res)=>{
-    
+router.post('/signin',async(req,res)=>{
+    const {name,email,password} = req.body;
+if(!email || !name ||!password){
+    return res.status(204).send({error:"Input all fields"})
+}
+try {
+    const user = await User.findOne({
+        email,
+        password,
+    })
+    if(user)
+        {
+            if(user.password===password)
+            res.status(200).send('Success');
+        }
+} catch (error) {
+    res.send(error, "error occurred")
+}
+ 
 })
 
 
